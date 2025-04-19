@@ -960,11 +960,7 @@ addMarkers <- function(
 
 getCrosstalkOptions <- function(data) {
   if (is.SharedData(data)) {
-    # Make sure we pass individual keys, not just the group key
-    list(
-      ctKey = data$key(),
-      ctGroup = data$groupName()
-    )
+    list(ctKey = data$key(), ctGroup = data$groupName())
   } else {
     NULL
   }
