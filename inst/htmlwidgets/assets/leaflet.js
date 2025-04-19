@@ -1464,7 +1464,6 @@ methods.addWMSTiles = function (baseUrl, layerId, group, options) {
   this.layerManager.addLayer(_leaflet2["default"].tileLayer.wms(baseUrl, options), "tile", layerId, group);
 };
 
-
 function addMarkers(map, df, group, clusterOptions, clusterId, markerFunc) {
 
   function updateClusterMarkers(filtered, ctGroup, clusterGroup, ctKeyColumn) {
@@ -2169,11 +2168,11 @@ methods.addLegend = function (options) {
 
       var tickOffset = singleBinHeight / singleBinPct * options.extra.p_1;
       gradSpan = (0, _jquery2["default"])("<span/>").css({
-        background: "linear-gradient(" + colors + ")",
-        opacity: options.opacity,
-        height: totalHeight + "px",
-        width: "18px",
-        display: "block",
+        "background": "linear-gradient(" + colors + ")",
+        "opacity": options.opacity,
+        "height": totalHeight + "px",
+        "width": "18px",
+        "display": "block",
         "margin-top": vMargin + "px"
       });
       var leftDiv = (0, _jquery2["default"])("<div/>").css("float", "left"),
@@ -2360,14 +2359,14 @@ function setupShowHideGroupsOnZoom(map) {
       if (visible) {
         map.addLayer(layer);
         map.fire("groupadd", {
-          name: group,
-          layer: layer
+          "name": group,
+          "layer": layer
         });
       } else {
         map.removeLayer(layer);
         map.fire("groupremove", {
-          name: group,
-          layer: layer
+          "name": group,
+          "layer": layer
         });
       }
     }
