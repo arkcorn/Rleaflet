@@ -396,8 +396,6 @@ methods.addMarkers = function (
   crosstalkOptions
 ) {
 
-  if (icon) icon = recycleIcon(icon);
-
   let iconData = {};
   for (let i = 0; i < icon.length; i++) {
     // This works because the icons are just stored as named lists before
@@ -430,9 +428,6 @@ methods.addMarkers = function (
   function updateClusters(filtered) {
     if (!clusterOptions) return;
     
-    // FIXED: Distinguish between "filter cleared" and "no matches"
-    // Only show all when filtered.value is null/undefined (filter cleared)
-    // Otherwise, only show markers that match the filter
     const showAllMarkers = filtered.value === null || filtered.value === undefined;
     
     // For each marker, show/hide based on filter state
@@ -481,19 +476,6 @@ methods.addMarkers = function (
     return this.layerManager.addLayer(markers, "marker", layerId, group);
   }
 };
-
-function recycleIcon(iconset) {
-  if (!iconset) {
-    return iconset;
-  }
-
-  // If the icon set is a single icon, wrap it in an array
-  if (typeof iconset === "object" && !$.isArray(iconset)) {
-    iconset = [iconset];
-  }
-
-  return iconset;
-}
 
 function createIcon(icon) {
   return L.icon(icon);

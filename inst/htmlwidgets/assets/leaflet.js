@@ -1460,7 +1460,26 @@ methods.addWMSTiles = function (baseUrl, layerId, group, options) {
   }
 
   this.layerManager.addLayer(_leaflet2["default"].tileLayer.wms(baseUrl, options), "tile", layerId, group);
-};
+}; // Given:
+//   {data: ["a", "b", "c"], index: [0, 1, 0, 2]}
+// returns:
+//   ["a", "b", "a", "c"]
+
+function unpackStrings(iconset) {
+  if (!iconset) {
+    return iconset;
+  }
+
+  if (typeof iconset.index === "undefined") {
+    return iconset;
+  }
+
+  iconset.data = (0, _util.asArray)(iconset.data);
+  iconset.index = (0, _util.asArray)(iconset.index);
+  return _jquery2["default"].map(iconset.index, function (e, i) {
+    return iconset.data[e];
+  });
+}
 
 function addMarkers(map, df, group, clusterOptions, clusterId, markerFunc) {
 
