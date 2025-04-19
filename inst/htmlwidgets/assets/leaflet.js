@@ -1465,6 +1465,7 @@ methods.addWMSTiles = function (baseUrl, layerId, group, options) {
 // returns:
 //   ["a", "b", "a", "c"]
 
+
 function unpackStrings(iconset) {
   if (!iconset) {
     return iconset;
@@ -1688,7 +1689,7 @@ function addMarkers(map, df, group, clusterOptions, clusterId, markerFunc) {
   }).call(map);
 }
 
-methods.addGenericMarkers = addMarkers; // Add these utility functions that are missing
+methods.addGenericMarkers = addMarkers;
 
 function createIcon(icon) {
   return _leaflet2["default"].icon(icon);
@@ -1717,7 +1718,7 @@ methods.addMarkers = function (lat, lng, icon, layerId, group, options, popup, p
   if (clusterOptions !== null) {
     markerClusterGroup = _leaflet2["default"].markerClusterGroup(clusterOptions);
     markerClusterGroup.addLayer(markers);
-  } // Define the update function at the root of the function body
+  }
 
 
   function updateClusters(filtered) {

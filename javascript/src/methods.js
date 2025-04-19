@@ -424,7 +424,6 @@ methods.addMarkers = function (
     markerClusterGroup.addLayer(markers);
   }
 
-  // Define the update function at the root of the function body
   function updateClusters(filtered) {
     if (!clusterOptions) return;
     
