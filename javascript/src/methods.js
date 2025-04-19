@@ -148,11 +148,7 @@ function unpackStrings(iconset) {
 }
 
 function addMarkers(map, df, group, clusterOptions, clusterId, markerFunc) {
-  console.log("===== HELPER addMarkers CALLED =====");
-  console.log("With cluster options:", clusterOptions);
-  console.log("With crosstalk:", !!df.get(0, "ctGroup"));
   
-  // Define updateClusterMarkers at the root of the function
   function updateClusterMarkers(filtered, ctGroup, clusterGroup, ctKeyColumn) {
     // For safety, check required parameters
     if (!filtered) {
@@ -168,9 +164,6 @@ function addMarkers(map, df, group, clusterOptions, clusterId, markerFunc) {
       ? filtered.value.map(v => String(v)) 
       : [];
       
-    // FIXED: Previously would show all markers when filter values were empty
-    // Now we distinguish between "filter is cleared" and "filter excludes all"
-    // Only show all markers when filtered.value is explicitly null or undefined
     const showAllMarkers = filtered.value === null || filtered.value === undefined;
     
     // Store the original cluster options to reuse them
@@ -195,8 +188,6 @@ function addMarkers(map, df, group, clusterOptions, clusterId, markerFunc) {
         rowsToShow.push(i);
       }
     }
-    
-    console.log(`Adding ${rowsToShow.length} markers to map out of ${df.nrow()} total`);
     
     // Process rows that should be shown
     for (let i of rowsToShow) {
@@ -350,43 +341,34 @@ function addMarkers(map, df, group, clusterOptions, clusterId, markerFunc) {
       let ctGroup = df.get(0, "ctGroup");
       let ctKeyColumn = "ctKey";
       
-      console.log("Setting up crosstalk for cluster group:", ctGroup);
       
-      try {
-        // Check if global crosstalk is available
-        if (window.crosstalk || global.crosstalk) {
-          let crosstalkObj = window.crosstalk || global.crosstalk;
-          
-          // Create a proper filter handle instead of using group().on()
-          let filterHandle = new crosstalkObj.FilterHandle(ctGroup);
-          
-          // Subscribe to filter changes using the handle
-          filterHandle.on("change", function(e) {
-            console.log("Filter change event received:", e);
-            const newClusterGroup = updateClusterMarkers(e, ctGroup, clusterGroup, ctKeyColumn);
-            if (newClusterGroup) {
-              clusterGroup = newClusterGroup;
-            }
-          });
-          
-          // Initial setup
-          console.log("Setting up initial filter state");
-          if (filterHandle.filteredKeys) {
-            const newClusterGroup = updateClusterMarkers(
-              {value: filterHandle.filteredKeys}, 
-              ctGroup, 
-              clusterGroup, 
-              ctKeyColumn
-            );
-            if (newClusterGroup) {
-              clusterGroup = newClusterGroup;
-            }
+      // Check if global crosstalk is available
+      if (window.crosstalk || global.crosstalk) {
+        let crosstalkObj = window.crosstalk || global.crosstalk;
+        
+        // Create a proper filter handle instead of using group().on()
+        let filterHandle = new crosstalkObj.FilterHandle(ctGroup);
+        
+        // Subscribe to filter changes using the handle
+        filterHandle.on("change", function(e) {
+          const newClusterGroup = updateClusterMarkers(e, ctGroup, clusterGroup, ctKeyColumn);
+          if (newClusterGroup) {
+            clusterGroup = newClusterGroup;
           }
-        } else {
-          // console.warn("Crosstalk library not found");
+        });
+        
+        // Initial setup
+        if (filterHandle.filteredKeys) {
+          const newClusterGroup = updateClusterMarkers(
+            {value: filterHandle.filteredKeys}, 
+            ctGroup, 
+            clusterGroup, 
+            ctKeyColumn
+          );
+          if (newClusterGroup) {
+            clusterGroup = newClusterGroup;
+          }
         }
-      } catch (e) {
-        // console.error("Error setting up crosstalk filtering:", e);
       }
     }
 
@@ -413,11 +395,6 @@ methods.addMarkers = function (
   labelOptions,
   crosstalkOptions
 ) {
-
-  console.log("==== MARKER FUNCTION CALLED ====");
-  console.log("Has crosstalk options:", !!crosstalkOptions);
-  console.log("Has cluster options:", !!clusterOptions);
-  console.log("marker lat/lng count:", lat.length);
 
   if (icon) icon = recycleIcon(icon);
 
@@ -479,20 +456,15 @@ methods.addMarkers = function (
 
   // Handle crosstalk filtering
   if (crosstalkOptions) {
-    console.log("Setting up crosstalk with options:", crosstalkOptions);
-    console.log("Using global.crosstalk:", typeof global.crosstalk);
     
     let filterHandle = new global.crosstalk.FilterHandle(crosstalkOptions.ctGroup);
-    console.log("Created crosstalk filter handle");
     
     // Subscribe to filter changes
     filterHandle.on("change", function(e) {
-      console.log("filterChange event received:", e);
       updateClusters(e);
     });
     
     // Initial setup
-    console.log("Setting up initial state with:", filterHandle.filteredKeys);
     if (filterHandle.filteredKeys) {
       updateClusters({value: filterHandle.filteredKeys});
     }
