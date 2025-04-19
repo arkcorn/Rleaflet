@@ -1349,8 +1349,6 @@ var _mipmapper2 = _interopRequireDefault(_mipmapper);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 var methods = {};
 exports["default"] = methods;
 
@@ -1673,26 +1671,12 @@ function addMarkers(map, df, group, clusterOptions, clusterId, markerFunc) {
 
 methods.addGenericMarkers = addMarkers; // Add these utility functions that are missing
 
-function recycleIcon(iconset) {
-  if (!iconset) {
-    return iconset;
-  } // If the icon set is a single icon, wrap it in an array
-
-
-  if (_typeof(iconset) === "object" && !_jquery2["default"].isArray(iconset)) {
-    iconset = [iconset];
-  }
-
-  return iconset;
-}
-
 function createIcon(icon) {
   return _leaflet2["default"].icon(icon);
-} // Now fix the addMarkers function
+} 
 
 
 methods.addMarkers = function (lat, lng, icon, layerId, group, options, popup, popupOptions, clusterOptions, clusterId, label, labelOptions, crosstalkOptions) {
-  if (icon) icon = recycleIcon(icon);
   var iconData = {};
 
   for (var i = 0; i < icon.length; i++) {
